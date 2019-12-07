@@ -2,12 +2,20 @@
 
 Simple configurable script to create ESRI shapefile from a single geocoded address.
 
+## Requirements
+
+- Python 3
+- [GEOS](https://trac.osgeo.org/geos/)
+    - Ubuntu: `sudo apt install libgeos-dev`
+    - Mac: `brew install geos`
+
 ## Installation
 
 ```
 git clone git@github.com:hdbhdb/vectorizeaddress.git
 cd vectorizeaddress
-pip install -r requirement.txt
+pip install -r requirements.txt
+chmod +x vectaddy.py
 sudo ln vectaddy.py /usr/local/bin/vectaddy
 ```
 
