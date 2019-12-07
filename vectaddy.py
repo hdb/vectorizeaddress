@@ -1,3 +1,5 @@
+#!/usr/bin/env python3  
+
 from shapely.geometry import mapping
 import fiona
 from fiona.crs import from_epsg
@@ -16,7 +18,7 @@ def parse():
         )
 
     parser.add_argument('input', nargs='?', default=None, help='address to geocode')
-    parser.add_argument('-o', '--output', nargs='?', default=None, help='output filename for shp file. if no output is specified, print point coordinates.')
+    parser.add_argument('-o', '--output', nargs='?', default=None, help='output filename for shp file. default is to use address.')
     parser.add_argument('-L', '--default-location', nargs='?', default=None, help='configure default location (city, state, country, etc.) to addend to searches')
     parser.add_argument('-G', '--google-api', nargs='?', default=None, help='add Google Maps API key to configuration')
 
@@ -102,29 +104,32 @@ def main():
         'properties': {'id': 'int'},
     }
 
-    if args.output is not None:
-
-        if not args.output.endswith(".shp"):
-            try:
-                os.mkdir(args.output)
-                outputfile = args.output + '/' + os.path.splitext(os.path.basename(args.output))[0] + ".shp"
-            except:
-                outputfile = args.output + '/' + os.path.splitext(os.path.basename(args.output))[0] + ".shp"
-        else:
-            outputfile = args.output
-
-        # Write a new Shapefile
-        with fiona.open(outputfile, 'w', 'ESRI Shapefile', schema, crs=from_epsg(4326)) as c:
-
-            c.write({
-                'geometry': mapping(point),
-                'properties': {'id': 123},
-            }
-        )
-
-        print('saved', address, 'at', address_coordinates, 'to', outputfile)
+    if args.output is None:
+        out = address.replace(' ','-')
     else:
-        print(address, 'at', address_coordinates)
+        out = args.output
+
+    outdir = os.path.splitext(out)[0]
+
+    try:
+        os.mkdir(outdir)
+            
+    except:
+        print('exporting shapefile to exisiting directory', outdir)
+        
+    outputfile = outdir + '/' + os.path.splitext(os.path.basename(out))[0] + ".shp"
+
+
+    # Write a new Shapefile
+    with fiona.open(outputfile, 'w', 'ESRI Shapefile', schema, crs=from_epsg(4326)) as c:
+
+        c.write({
+            'geometry': mapping(point),
+            'properties': {'id': 123},
+        }
+    )
+
+    print('saved', address, 'at', address_coordinates, 'to', outputfile)
 
 if __name__ == '__main__':
     main()
