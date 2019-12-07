@@ -1,0 +1,4 @@
+Shapely==1.6.4.post2
+Fiona==1.8.11
+geocoder==1.38.1
+PyYAML==5.2
