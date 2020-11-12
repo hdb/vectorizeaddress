@@ -12,7 +12,7 @@ Simple configurable script to create ESRI shapefile from a single geocoded addre
 ## Installation
 
 ```
-git clone git@github.com:hdbhdb/vectorizeaddress.git
+git clone git@github.com:hdb/vectorizeaddress.git
 cd vectorizeaddress
 pip install -r requirements.txt
 chmod +x vectaddy.py
